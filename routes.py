@@ -173,6 +173,9 @@ def predict():
         predicted_class = model.predict([features])[0]
         predictions_cache[features] = predicted_class
 
+    # Converta predicted_class para int antes de salvar
+    predicted_class = int(predicted_class)
+
     new_prediction = Prediction(
         sepal_length=sepal_length,
         sepal_width=sepal_width,
@@ -187,7 +190,7 @@ def predict():
         'sepal_width': sepal_width,
         'petal_length': petal_length,
         'petal_width': petal_width,
-        'predicted_class': int(predicted_class)
+        'predicted_class': predicted_class
     }), 200
 
 @bp.route('/predictions', methods=['GET'])
@@ -206,12 +209,12 @@ def get_predictions():
     result = []
     for pred in predictions:
         result.append({
-            'id': pred.id,
-            'sepal_length': pred.sepal_length,
-            'sepal_width': pred.sepal_width,
-            'petal_length': pred.petal_length,
-            'petal_width': pred.petal_width,
-            'predicted_class': pred.predicted_class,
-            'created_at': pred.created_at
+            'id': int(pred.id),
+            'sepal_length': float(pred.sepal_length),
+            'sepal_width': float(pred.sepal_width),
+            'petal_length': float(pred.petal_length),
+            'petal_width': float(pred.petal_width),
+            'predicted_class': int(pred.predicted_class),
+            'created_at': pred.created_at.isoformat() if pred.created_at else None
         })
     return jsonify(result), 200
