@@ -234,20 +234,31 @@ def predict():
         'predicted_class': int(predicted_class)
     }), 200
 
-@app.route('/', methods=['GET'])
-def home():
+@app.route('/predictions', methods=['GET'])
+@jwt_required()
+def get_predictions():
     """
-    Home route
+    Get all predictions made so far
     ---
+    tags:
+      - Prediction
     responses:
       200:
-        description: API is working
+        description: List of all predictions
     """
-    return jsonify({'message': 'Flask API is working on Vercel!', 'version': '1.0.0'}), 200
-
-# Vercel requires the app to be accessible via this function
-def handler(request):
-    return app(request.environ, lambda status, headers: None)
+    predictions = Prediction.query.all()
+    result = []
+    for pred in predictions:
+        result.append({
+            'id': int(pred.id),
+            'sepal_length': float(pred.sepal_length),
+            'sepal_width': float(pred.sepal_width),
+            'petal_length': float(pred.petal_length),
+            'petal_width': float(pred.petal_width),
+            'predicted_class': int(pred.predicted_class),
+            'created_at': pred.created_at.isoformat() if pred.created_at else None
+        })
+    return jsonify(result), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
