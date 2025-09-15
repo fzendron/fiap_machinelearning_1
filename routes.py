@@ -9,6 +9,10 @@ import numpy as np
 
 bp = Blueprint('main', __name__)
 
+@bp.get("/")
+def root():
+    return "ok"
+
 @bp.route('/register', methods=['POST'])
 def register():
     """

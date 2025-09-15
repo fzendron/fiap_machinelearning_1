@@ -41,6 +41,10 @@ def get_db_connection():
     conn.commit()
     return conn
 
+@app.get("/")
+def root():
+    return jsonify({'message': 'Flask API is working on Vercel!', 'version': '1.0.0'}), 200
+
 @app.route('/register', methods=['POST'])
 def register():
     """
@@ -90,6 +94,7 @@ def register():
         return jsonify({'message': 'User registered successfully'}), 201
     finally:
         conn.close()
+
 
 @app.route('/login', methods=['POST'])
 def login():

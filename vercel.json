@@ -1,12 +1,12 @@
 {
   "version": 2,
   "functions": {
-    "api/index.py": {
-      "runtime": "python3.9"
+    "api/**/*.py": {
+      "maxDuration": 10,
+      "memory": 1024
     }
   },
   "env": {
     "PYTHONPATH": "."
-  },
-  "routes": [{ "src": "/(.*)", "dest": "/api/index" }]
+  }
 }
